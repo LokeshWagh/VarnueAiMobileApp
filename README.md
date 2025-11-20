@@ -43,12 +43,13 @@ This project is built using **Expo**, **React Native**, and **TypeScript**, feat
    ```bash
     npm run web
    ```
-##How To Run In Mobile 
+## How To Run In Mobile 
  - Download Expo (Android app)
  - Run the project By npm run web
  - scan the QR show In Terminal in Expo Add
 
-
+## OverView Of projects 
+### 1. Home page Structure 
 
 
 
