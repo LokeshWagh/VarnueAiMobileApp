@@ -50,7 +50,6 @@ This project is built using **Expo**, **React Native**, and **TypeScript**, feat
 
 ## OverView Of projects 
 ### 1. Home page Structure 
-![Home Screen](..
-/assets/ReadmiImages/Home.jpg)
+![Home Screen](assets/ReadmiImages/Home.jpg)
 
 
