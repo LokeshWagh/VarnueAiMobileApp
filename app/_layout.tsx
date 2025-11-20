@@ -1,4 +1,8 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
@@ -16,12 +20,23 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>  
+        <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="login" options={{ headerShown: false }} />
-        
-          <Stack.Screen name="modal" options={{ presentation: "modal", title: "Modal" }} />
+
+          <Stack.Screen
+            name="modal"
+            options={{ presentation: "modal", title: "Modal" }}
+          />
+          <Stack.Screen
+            name="dinein"
+            options={{
+              title: "Dine In Table",
+              headerTitleAlign: "center",
+            }}
+          />
         </Stack>
+
         <StatusBar style="auto" />
       </ThemeProvider>
     </GestureHandlerRootView>

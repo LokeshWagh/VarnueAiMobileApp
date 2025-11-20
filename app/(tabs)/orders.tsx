@@ -358,7 +358,7 @@ const firstItem =
           Orders
         </Text>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{
             width: 40,
             height: 40,
@@ -369,7 +369,7 @@ const firstItem =
           }}
         >
           <Feather name="filter" size={20} color="#4A90E2" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       {/* Search box */}

@@ -25,9 +25,8 @@ const ProfileScreen = () => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // Filhal static
-  const ordersCount = 0;
-  const reservationsCount = 0;
+  const [ordersCount, setOrdersCount] = useState(0);
+  const [reservationsCount, setReservationsCount] = useState(0);
 
   const loadUser = async () => {
     try {
@@ -56,15 +55,51 @@ const ProfileScreen = () => {
     }
   };
 
+  const loadOrderCounts = async () => {
+    try {
+      const mobile = await AsyncStorage.getItem("userMobile");
+      if (!mobile) return;
+
+      const { data: userData } = await supabase
+        .from("users")
+        .select("id")
+        .eq("mobile", mobile)
+        .single();
+
+      if (!userData) return;
+
+      const userId = userData.id;
+
+      // Count Delivery Orders
+      const { count: deliveryCount } = await supabase
+        .from("orders")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", userId)
+        .eq("order_type", "delivery");
+
+      // Count Dine-In Reservations
+      const { count: dineinCount } = await supabase
+        .from("orders")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", userId)
+        .eq("order_type", "dinein");
+
+      setOrdersCount(deliveryCount || 0);
+      setReservationsCount(dineinCount || 0);
+    } catch (err) {
+      console.log("loadOrderCounts error:", err);
+    }
+  };
+
   useEffect(() => {
     loadUser();
+    loadOrderCounts();
   }, []);
 
-const handleLogout = async () => {
-  await AsyncStorage.removeItem("userMobile");
-  router.replace("/login"); // redirect to login
-};
-
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("userMobile");
+    router.replace("/login"); // redirect to login
+  };
 
   return (
     <View style={styles.container}>

@@ -602,7 +602,7 @@ export default function DineInPage() {
           >
             <View>
               <Text style={{ fontWeight: "700" }}>
-                Pre-order Food (Optional)
+                Pre-order Food
               </Text>
               <Text style={{ color: "#6B7280", marginTop: 4 }}>
                 Order ahead and save time
