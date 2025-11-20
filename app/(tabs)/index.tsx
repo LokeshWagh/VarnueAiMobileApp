@@ -219,7 +219,10 @@ export default function HomePage() {
             <Text style={styles.offerDiscount}>Get 50% OFF</Text>
             <Text style={styles.offerSub}>On your first order above ₹500</Text>
 
-            <TouchableOpacity style={styles.orderBtn}>
+            <TouchableOpacity
+              style={styles.orderBtn}
+              onPress={() => router.push("/view-all-catgy")}
+            >
               <Text style={styles.orderBtnText}>Order Now</Text>
             </TouchableOpacity>
           </View>

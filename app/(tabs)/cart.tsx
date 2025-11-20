@@ -131,25 +131,39 @@ export default function CartPage() {
   const onCheckout = () => {
     if (isScheduled) {
       if (!scheduledTime) {
-        Alert.alert("Please enter a time");
+        Alert.alert("Please select a time");
         return;
       }
+
+      const [hh, mm] = scheduledTime.split(":");
+
+      if (!hh || !mm || isNaN(Number(hh)) || isNaN(Number(mm))) {
+        Alert.alert("Invalid time format");
+        return;
+      }
+
+      const finalDate = new Date();
+      finalDate.setHours(Number(hh));
+      finalDate.setMinutes(Number(mm));
+      finalDate.setSeconds(0);
+
+      if (isNaN(finalDate.getTime())) {
+        Alert.alert("Invalid date");
+        return;
+      }
+
+      router.push({
+        pathname: "/checkout",
+        params: {
+          mode: "delivery",
+          scheduled: finalDate.toISOString(),
+        },
+      });
+      return;
     }
 
-    const fullDate = new Date();
-    const [hh, mm] = scheduledTime.split(":");
-
-    fullDate.setHours(Number(hh));
-    fullDate.setMinutes(Number(mm));
-    fullDate.setSeconds(0);
-
-    router.push({
-      pathname: "/checkout",
-      params: {
-        mode: "delivery",
-        scheduled: fullDate.toISOString(),
-      },
-    });
+    // Normal checkout
+    router.push("/checkout");
   };
 
   return (
@@ -469,50 +483,53 @@ export default function CartPage() {
 
             {isScheduled && (
               <>
-              <View style={styles.datetimeContainer}>
-                <Text style={styles.label}>Date</Text>
-                <View style={styles.dateBox}>
-                  <Feather name="calendar" size={18} color="#FF6A34" />
-                  <Text style={styles.dateText}>Thu, 20 Nov, 2025</Text>
+                <View style={styles.datetimeContainer}>
+                  <Text style={styles.label}>Date</Text>
+                  <View style={styles.dateBox}>
+                    <Feather name="calendar" size={18} color="#FF6A34" />
+                    <Text style={styles.dateText}>Thu, 20 Nov, 2025</Text>
 
-                  <TouchableOpacity style={styles.todayBtn}>
-                    <Text style={styles.todayTxt}>Today</Text>
+                    <TouchableOpacity style={styles.todayBtn}>
+                      <Text style={styles.todayTxt}>Today</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <Text style={[styles.label, { marginTop: 12 }]}>Time</Text>
+
+                  <TouchableOpacity
+                    onPress={() => setShowPicker(true)}
+                    style={styles.timeBox}
+                  >
+                    <Feather name="clock" size={18} color="#9CA3AF" />
+
+                    <Text style={styles.timeInput}>
+                      {scheduledTime ? scheduledTime : "--:--"}
+                    </Text>
                   </TouchableOpacity>
-                </View>
-                <Text style={[styles.label, { marginTop: 12 }]}>Time</Text>
 
-                <TouchableOpacity
-                  onPress={() => setShowPicker(true)}
-                  style={styles.timeBox}
-                >
-                  <Feather name="clock" size={18} color="#9CA3AF" />
+                  {showPicker && (
+                    <DateTimePicker
+                      value={selectedDate}
+                      mode="time"
+                      is24Hour={true}
+                      display="spinner"
+                      onChange={(event, date) => {
+                        setShowPicker(false);
+                        if (date) {
+                          const hh = date
+                            .getHours()
+                            .toString()
+                            .padStart(2, "0");
+                          const mm = date
+                            .getMinutes()
+                            .toString()
+                            .padStart(2, "0");
 
-                  <Text style={styles.timeInput}>
-                    {scheduledTime ? scheduledTime : "--:--"}
-                  </Text>
-                </TouchableOpacity>
-
-                {showPicker && (
-                  <DateTimePicker
-                    value={selectedDate}
-                    mode="time"
-                    is24Hour={true}
-                    display="spinner"
-                    onChange={(event, date) => {
-                      setShowPicker(false);
-                      if (date) {
-                        const hh = date.getHours().toString().padStart(2, "0");
-                        const mm = date
-                          .getMinutes()
-                          .toString()
-                          .padStart(2, "0");
-
-                        setSelectedDate(date);
-                        setScheduledTime(`${hh}:${mm}`);
-                      }
-                    }}
-                  />
-                )}
+                          setSelectedDate(date);
+                          setScheduledTime(`${hh}:${mm}`);
+                        }
+                      }}
+                    />
+                  )}
                 </View>
               </>
             )}
@@ -857,85 +874,84 @@ const styles = StyleSheet.create({
     color: "#111",
   },
   scheduleCardMain: {
-  marginTop: 14,
-},
+    marginTop: 14,
+  },
 
-scheduleInner: {
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center",
-  padding: 16,
-  borderRadius: 16,
-  borderWidth: 1,
-  borderColor: "#FFE0D0",
-},
+  scheduleInner: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "#FFE0D0",
+  },
 
-scheduleIconBig: {
-  width: 40,
-  height: 40,
-  borderRadius: 20,
-  backgroundColor: "#FFE5D5",
-  justifyContent: "center",
-  alignItems: "center",
-},
+  scheduleIconBig: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#FFE5D5",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 
-scheduleTitle: {
-  fontWeight: "700",
-  fontSize: 15,
-  color: "#111",
-},
+  scheduleTitle: {
+    fontWeight: "700",
+    fontSize: 15,
+    color: "#111",
+  },
 
-scheduleSub: {
-  fontSize: 12,
-  color: "#6B7280",
-},
+  scheduleSub: {
+    fontSize: 12,
+    color: "#6B7280",
+  },
 
-datetimeContainer: {
-  padding: 16,
-  borderRadius: 16,
-  backgroundColor: "#FFF8F3",
-  marginTop: 10,
-  borderWidth: 1,
-  borderColor: "#FFE4D6",
-},
+  datetimeContainer: {
+    padding: 16,
+    borderRadius: 16,
+    backgroundColor: "#FFF8F3",
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: "#FFE4D6",
+  },
 
-label: {
-  fontSize: 13,
-  fontWeight: "600",
-  color: "#374151",
-  marginBottom: 6,
-},
+  label: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#374151",
+    marginBottom: 6,
+  },
 
-dateBox: {
-  flexDirection: "row",
-  alignItems: "center",
-  backgroundColor: "#fff",
-  paddingHorizontal: 14,
-  paddingVertical: 10,
-  borderRadius: 12,
-  borderWidth: 1,
-  borderColor: "#F3D9CC",
-  justifyContent: "space-between",
-},
+  dateBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#F3D9CC",
+    justifyContent: "space-between",
+  },
 
-dateText: {
-  marginLeft: 10,
-  flex: 1,
-  fontSize: 14,
-  color: "#111",
-},
+  dateText: {
+    marginLeft: 10,
+    flex: 1,
+    fontSize: 14,
+    color: "#111",
+  },
 
-todayBtn: {
-  backgroundColor: "#FFF0E6",
-  paddingHorizontal: 10,
-  paddingVertical: 6,
-  borderRadius: 10,
-},
+  todayBtn: {
+    backgroundColor: "#FFF0E6",
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 10,
+  },
 
-todayTxt: {
-  color: "#FF6A34",
-  fontWeight: "600",
-  fontSize: 12,
-},
-
+  todayTxt: {
+    color: "#FF6A34",
+    fontWeight: "600",
+    fontSize: 12,
+  },
 });

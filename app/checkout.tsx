@@ -275,7 +275,7 @@ export default function CheckoutPage() {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: "#fff" }}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      behavior={Platform.OS === "android" ? "padding" : undefined}
     >
       {/* Header: KEEP TITLE "Checkout" per your request, styling like Cart */}
       {/* <View style={styles.header}>
@@ -290,7 +290,7 @@ export default function CheckoutPage() {
 
       <ScrollView
         style={{ flex: 1, padding: 16 }}
-        contentContainerStyle={{ paddingBottom: 200 }}
+        contentContainerStyle={{ paddingBottom: 0 }}
       >
         {/* show scheduled banner if param present */}
         {scheduledParam ? (
@@ -955,7 +955,7 @@ const styles = StyleSheet.create({
   bottom: {
     flexDirection: "row",
     padding: 16,
-    paddingBottom: 50,
+    paddingBottom: 30,
 
     backgroundColor: "#fff",
     borderTopWidth: 1,
