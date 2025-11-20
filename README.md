@@ -6,7 +6,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 1. Clone the Project
    ```bash
-   npm install
+   git clone git@github.com:LokeshWagh/VarnueAiMobileApp.git
    ```
 
 2. Install dependencies
@@ -20,7 +20,10 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    ```bash
    npx expo start
    ```
-
+   or 
+    ```bash
+   npm run web
+   ```
 In the output, you'll find options to open the app in a
 
 - [development build](https://docs.expo.dev/develop/development-builds/introduction/)
